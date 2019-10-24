@@ -1,0 +1,41 @@
+setcps (140/120/2)
+
+hush
+
+let g p = (const $ s "~") $ p
+
+do
+    let spat = "[1.1 ~ ~ ~ ~ ~ 0.4 ~ ~ ~]"
+        fpat = "[0   ~ ~ ~ ~ ~ 127 ~ ~ ~]"
+        dpat = "[0   ~ ~ ~ ~ ~ 1   ~ ~ ~]"
+        gpat = "[1.1 ~ ~ ~ ~ ~ 0.9 ~ ~ ~]"
+        cpat = "[1   ~ ~ ~ ~ ~ 1   ~ ~ ~]"
+        mod p = spaceOut [1,1.1,0.9,0.95,1.7,1.25,0.8,1.65,1,0.7,0.823,1.5,1,2,1.8] $ p        
+    p "drums"
+        $ mod
+        $ n dpat 
+        # s "limekit" 
+        # gain gpat
+    p "not_drums" 
+        $ stack [
+            mod 
+                $ gain spat 
+                # note "-12"
+            , mod $ ccv fpat # ccn 100 
+            , (# ccv (range 0 127 $ shrand 123)) $ degradeBy 0.2 $ shift' 10 $ mod $ gain "1*4" # ccn 1  
+            , (# ccv (range 0 127 $ shrand 1234)) $ degradeBy 0.2 $ shift' 11 $ mod $ gain "1*4" # ccn 2  
+            , ccv 127 # ccn 3
+            , ccv 0 # ccn 4
+        ] 
+        # s "midi" 
+        # midichan 15
+
+hush
+
+
+d1 $ s "k*2" # pan "0 1"
+
+hush
+
+
+d1 $ gain "1*4" # ccn 1 # ccv (range 0 127 $ shrand 123) # s "midi" # midichan 15

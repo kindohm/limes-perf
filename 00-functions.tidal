@@ -1,0 +1,4 @@
+let shift p = (1 <~) $ p
+    shift' n p = (n <~) $ p
+    shrand n = (shift' n $ rand)
+    g p = (const $ sound "~") $ p
